@@ -1,6 +1,7 @@
 # What I have learned: 1 - First, I need to ignore everything
 *
 #Second, I have to re-include what I want to be included
+!*/
 !*.cpp
 !*.h
 !*.md
