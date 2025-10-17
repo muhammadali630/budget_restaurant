@@ -123,7 +123,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Order.cpp" />
+    <ClCompile Include="Registry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Restaurant.h" />

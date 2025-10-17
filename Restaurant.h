@@ -15,10 +15,12 @@ namespace Restaurant {
 		std::vector<Product> _menu;
 	public:
 		Menu();
+		void handle(std::vector<std::string> args);
 	};
 
 	class Order {
 	public:
+		void handle(std::vector<std::string> args);
 		void new_order();
 		void change_order();
 		void deliver_order();
@@ -36,3 +38,6 @@ namespace Restaurant {
 	};
 
 }
+
+
+//next episode:
