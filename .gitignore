@@ -1,7 +1,10 @@
-# What I have learned: 1 - First, I need to ignore everything
+# Ignore everything
 *
-#Second, I have to re-include what I want to be included
+
+# But not folders (so Git can recurse)
 !*/
-!*.cpp
-!*.h
-!*.md
+
+# And not these file types
+!**/*.cpp
+!**/*.h
+!**/*.md
