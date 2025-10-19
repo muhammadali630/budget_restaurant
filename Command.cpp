@@ -1,5 +1,9 @@
 #include "System.h"
 
+System::Command::Command(const std::vector<std::string>& args) : _arg_vector(args){
+	
+}
+
 System::Command::Command(std::string input) {
 	_split(input);
 }

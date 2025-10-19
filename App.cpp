@@ -11,7 +11,7 @@ int System::App::run() {
 		std::cin >> command;
 		// run the command
 		//main_loop(command);
-		test_loop();
+		main_loop(command);
 		// if exit conditions are met, quit
 	}
 	return _return_value;
@@ -24,13 +24,13 @@ void System::App::main_loop(Command command){
 }
 
 void System::App::test_loop(){
-	std::vector<Restaurant::Product> products = {
-    	Restaurant::Product("Pizza", 12.99),
-    	Restaurant::Product("Burger", 8.49),
-    	Restaurant::Product("Salad", 6.75)
-	};
-	Restaurant::Menu menu(products);
-	std::cout<<menu;
+	// std::vector<Restaurant::Product> products = {
+    // 	Restaurant::Product("Pizza", 12.99),
+    // 	Restaurant::Product("Burger", 8.49),
+    // 	Restaurant::Product("Salad", 6.75)
+	// };
+	// Restaurant::Menu menu(products);
+	// std::cout<<menu;
 	//quit(0);
 }
 

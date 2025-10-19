@@ -13,6 +13,7 @@ namespace System {
 		std::vector<std::string> _arg_vector;
 		void _split(std::string _user_input);
 	public:
+		Command(const std::vector<std::string>& args);
 		Command(std::string input);
 		Command();
 		friend std::ostream& operator<<(std::ostream& os, const Command& command);
@@ -24,13 +25,13 @@ namespace System {
 
 	using Map_S2F = std::unordered_map <
 			std::string,
-			std::function<void(const std::vector<std::string>& args)>>;
+			std::function<void(const Command& cmd)>>;
 
 	class Registry {
 		static Map_S2F _registry;
 		Map_S2F _sub_registry;
 	public:
-		Registry(Map_S2F reg);
+		Registry(Map_S2F cmd);
 		Registry();
 		void initiate_command(Command command);
 		void initiate_sub_command(Command command);
@@ -48,7 +49,14 @@ namespace System {
 	};
 
 	class File {
-		
+	public:
+		static void write(
+			const std::string& name,
+			const std::string& content);
+		static std::vector<std::string> read_lines(
+			const std::string& name
+		);
+		bool exists(const std::string& name) const;
 	};
 
 }

@@ -6,7 +6,7 @@ Restaurant::Menu::Menu(std::vector<Restaurant::Product> pdts) : _menu(pdts) {
 
 Restaurant::Menu::Menu() = default;
 
-void Restaurant::Menu::handle(std::vector<std::string> args) {
+void Restaurant::Menu::handle(const System::Command& cmd) {
 	return;
 }
 
