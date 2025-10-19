@@ -1,4 +1,5 @@
 #include "System.h"
+#include "Restaurant.h"
 
 System::App::App() = default;
 
@@ -9,10 +10,28 @@ int System::App::run() {
 		System::Command command;
 		std::cin >> command;
 		// run the command
-		_call_function(command);
+		//main_loop(command);
+		test_loop();
 		// if exit conditions are met, quit
 	}
 	return _return_value;
+}
+
+void System::App::main_loop(Command command){
+	if (command.is_empty()) return;
+	System::Registry reg;
+	reg.initiate_command(command);
+}
+
+void System::App::test_loop(){
+	std::vector<Restaurant::Product> products = {
+    	Restaurant::Product("Pizza", 12.99),
+    	Restaurant::Product("Burger", 8.49),
+    	Restaurant::Product("Salad", 6.75)
+	};
+	Restaurant::Menu menu(products);
+	std::cout<<menu;
+	//quit(0);
 }
 
 void System::App::quit(int result) { 
@@ -20,8 +39,3 @@ void System::App::quit(int result) {
 	_is_running = false;
 }
 
-void System::App::_call_function(Command command){
-	if (command.is_empty()) return;
-	System::Registry reg;
-	reg.initiate_command(command);
-}

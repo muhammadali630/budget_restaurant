@@ -22,23 +22,28 @@ namespace System {
 		bool is_empty() const;
 	};
 
-	class Registry {
-		static std::unordered_map <
+	using Map_S2F = std::unordered_map <
 			std::string,
-			std::function<void(const std::vector<std::string>& args)>>
-			_registry;
+			std::function<void(const std::vector<std::string>& args)>>;
+
+	class Registry {
+		static Map_S2F _registry;
+		Map_S2F _sub_registry;
 	public:
+		Registry(Map_S2F reg);
 		Registry();
 		void initiate_command(Command command);
+		void initiate_sub_command(Command command);
 	};
 
 	class App {
 		bool _is_running;
 		int _return_value;
-		void _call_function(System::Command command);
 	public:
 		App();
 		int run();
+		void main_loop(Command command);
+		void test_loop();
 		void quit(int result);
 	};
 

@@ -9,12 +9,15 @@ namespace Restaurant {
 		double _price;
 	public:
 		Product(std::string name, double price);
+		friend std::ostream& operator<<(std::ostream& os , const Product& pdt);
 	};
 
 	class Menu {
 		std::vector<Product> _menu;
 	public:
+		Menu(std::vector<Product> pdts);
 		Menu();
+		friend std::ostream& operator<<(std::ostream& os, Menu& menu);
 		void handle(std::vector<std::string> args);
 	};
 
