@@ -52,6 +52,8 @@ namespace Restaurant {
 		std::string _student_num;
 	public:
 		Customer(std::string first, std::string last, std::string number);
+		Customer();
+		friend std::ostream& operator<<(std::ostream& os, const Customer& ctm);
 		void history();
 	};
 

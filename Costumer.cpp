@@ -1,6 +1,6 @@
 #include "Restaurant.h"
 
-Restaurant::Customer::Costumer(
+Restaurant::Customer::Customer(
     std::string first,
      std::string last,
       std::string number) : 
@@ -10,11 +10,13 @@ Restaurant::Customer::Costumer(
 
       }
 
-std::ostream& Restaurant::operator<<(
-    std::ostream& os, Customer& ctm
-){
-    os<<ctm._first_name<<" "
-    <<ctm._last_name<<" "
-    <<ctm._first_name;
+Restaurant::Customer::Customer() {
+
+}
+
+std::ostream& Restaurant::operator<<(std::ostream& os, const Customer& ctm) {
+    os << ctm._first_name << " "
+        << ctm._last_name << " "
+        << ctm._student_num << " ";
     return os;
 }

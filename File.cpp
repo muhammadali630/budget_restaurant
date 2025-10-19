@@ -25,4 +25,3 @@ bool System::File::exists(
 	std::ifstream file(name);
 	return file.good();
 }
-
