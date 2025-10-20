@@ -11,11 +11,13 @@ System::App::App() {
  
 System::Registry System::App::_reg = System::Map_S2F({
 	{"order", [](const System::Command& cmd) {
-		//std::cout << 4;
 		Restaurant::Order::handle(cmd);
 	}},
 	{"menu", [](const System::Command& cmd) {
 		Restaurant::Menu::handle(cmd);
+	}},
+	{"customer", [](const System::Command& cmd) {
+		Restaurant::Customer::handle(cmd);
 	}},
 	{"quit", [](const System::Command&) {
 		quit(0);

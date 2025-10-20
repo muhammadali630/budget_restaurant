@@ -8,6 +8,7 @@
 namespace Restaurant {
 
 	class Customer {
+		static System::Registry _reg;
 		std::string _first_name;
 		std::string _last_name;
 		std::string _student_num;
@@ -15,7 +16,8 @@ namespace Restaurant {
 		Customer(std::string first, std::string last, std::string number);
 		Customer();
 		friend std::ostream& operator<<(std::ostream& os, const Customer& ctm);
-		void history();
+		static void handle(const System::Command& cmd);
+		static void history(const System::Command& cmd);
 	};
 
 	class Product {
@@ -36,7 +38,6 @@ namespace Restaurant {
 	class Menu {
 		std::vector<Product> _menu;
 	public:
-		//Menu(std::vector<Product> pdts);
 		Menu();
 		std::vector<Product> get_menu();
 		std::vector<Product>::const_iterator begin() const;
@@ -61,9 +62,7 @@ namespace Restaurant {
 		static void _normalize(Order& order);
 		static void _save(Order& order);
 	public:
-		Order();
 		Order(const System::Command& cmd);
-		//friend std::ostream& operator<<(std::ostream& os, const Order& order);
 		static void handle(const System::Command& cmd);
 		static void new_order(const System::Command& cmd);
 		static void change_order(Status new_status, const System::Command& cmd);

@@ -14,3 +14,8 @@ std::pair<bool, int> Restaurant::u_find_in_menu(
 	}
 	return { false , -1 };
 }
+
+std::string System::u_remove_spaces(std::string str) {
+	str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end()); //shout out to Copilot
+	return str;
+}

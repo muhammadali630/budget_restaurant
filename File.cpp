@@ -19,9 +19,9 @@ std::vector<std::string> System::File::read_lines(
 	return lines;
 }
 
-std::string System::File::read_line(
+std::string System::File::read_line( //requires an index , NOT a line number
 	const std::string& name,
-	const unsigned int index
+	const unsigned int index // index = line number - 1;
 ) {
 	std::ifstream in(name);
 	std::vector<std::string> lines;
@@ -109,4 +109,27 @@ void System::File::modify_section(
 		if (i != sections.size() - 1) new_line += "|";
 	}
 	modify_line(name, line_number, new_line);
+}
+
+std::string System::File::get_section(
+	const std::string name,
+	const unsigned int line_number,
+	const unsigned int section_index
+) {
+	if (!System::File::exists(name)) {
+		std::cerr << "ERROR : " << name << " not found" << std::endl;
+		return "";
+	}
+	std::string line = System::File::read_line(name, line_number - 1);
+	if (line.empty()) {
+		std::cerr << "ERROR : line invalid" << std::endl;
+		return "";
+	}
+	std::vector<std::string> sections;
+	std::stringstream ss(line);
+	std::string section;
+	while (std::getline(ss, section, '|')) {
+		sections.push_back(section);
+	}
+	return sections[section_index];
 }

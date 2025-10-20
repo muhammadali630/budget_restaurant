@@ -39,7 +39,6 @@ namespace System {
 	public:
 		Registry(Map_S2F cmd);
 		Registry();
-		void initiate_command(Command command);
 		void initiate_sub_command(Command command);
 	};
 
@@ -81,8 +80,14 @@ namespace System {
 			const unsigned int section_index,
 			const std::string& new_value
 		);
+		static std::string get_section(
+			const std::string name,
+			const unsigned int line_number,
+			const unsigned int section_index
+		);
 	};
 
 	bool u_is_number(std::string str);
 
+	std::string u_remove_spaces(std::string str);
 }

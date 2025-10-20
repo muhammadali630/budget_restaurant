@@ -42,10 +42,6 @@ void Restaurant::Order::_save(Order& order) {
     System::File::write("orders.log", str);
 }
 
-Restaurant::Order::Order() {
-
-}
-
 Restaurant::Order::Order(const System::Command& command) :
    _status(Status::in_progress) {
     if (command.end() < 3) {
@@ -55,23 +51,6 @@ Restaurant::Order::Order(const System::Command& command) :
     _customer = (Customer(
         command[0], command[1], command[2]
     ));
-    /*Restaurant::Menu menu;
-    for (int i = 3;i <= command.end(); i++) {
-        if (!Restaurant::u_find_in_menu(command[i], menu).first)
-            continue;
-        Product pdt = menu.get_menu()[Restaurant::u_find_in_menu(command[i], menu).second];
-        if (i + 1 > command.end()) {
-            if(Restaurant::u_find_in_menu(command[i], menu).first)
-                _items.emplace_back(pdt, 1);
-            continue;
-        }
-        unsigned int count = 1;
-        if (System::u_is_number(command[i + 1])) {
-            count = std::stoi(command[i + 1]);
-            i++;
-        }
-        _items.emplace_back(pdt, count);
-    }*/
     _items = Product::fill_product_list(
         System::Command::reduce(command, 3)
     );
@@ -81,17 +60,6 @@ Restaurant::Order::Order(const System::Command& command) :
     }
     _normalize(*this);
 }
-
-//std::ostream& Restaurant::operator<<(std::ostream& os, const Order& order) {
-//    for (const auto& x : order._items) {
-//        const auto& pdt = x.first;
-//        int quantity = x.second;
-//        os << pdt.get_name() << " : "
-//            << std::fixed << std::setprecision(2) << pdt.get_price()
-//            << " $ (x" << quantity << "), ";
-//    }
-//    return os;
-//}
 
 void Restaurant::Order::handle(const System::Command& cmd) {
     _reg.initiate_sub_command(cmd);
@@ -164,68 +132,6 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
         break;
     }
 }
-
-//void Restaurant::Order::cancel_order(const System::Command& cmd) {
-//    if (cmd.end() == 0 and System::u_is_number(cmd[0])) {
-//        if (not System::File::exists("orders.log")) {
-//            std::cerr << "ERROR : orders.log not found" << std::endl;
-//            return;
-//        }
-//        int target_line = std::stoi(cmd[0]);
-//        std::vector<std::string> lines = System::File::read_lines("orders.log");
-//        if (target_line<1 or target_line> static_cast<int>(lines.size())) {
-//            std::cerr << "ERROR : line number out of range" << std::endl;
-//            return;
-//        }
-//        std::string line = lines[target_line - 1];
-//        size_t last_pipe = line.rfind('|');
-//        if (last_pipe == std::string::npos) {
-//            std::cerr << "ERROR : malformed line" << std::endl;
-//            return;
-//        }
-//        size_t second_last_pipe = line.rfind('|', last_pipe - 1);
-//        if (second_last_pipe == std::string::npos) {
-//            std::cerr << "ERROR : malformed line" << std::endl;
-//            return;
-//        }                                                                  
-//        std::string updated_line = line.substr(0, second_last_pipe + 1) + "cancelled    " + line.substr(last_pipe);
-//        System::File::modify_line("orders.log", target_line, updated_line);
-//    }
-//    else {
-//        std::cerr << "ERROR : invalid command";
-//    }
-//}
-
-//void Restaurant::Order::deliver_order(const System::Command& cmd) {
-//    if (cmd.end() == 0 and System::u_is_number(cmd[0])) {
-//        if (not System::File::exists("orders.log")) {
-//            std::cerr << "ERROR : orders.log not found" << std::endl;
-//            return;
-//        }
-//        int target_line = std::stoi(cmd[0]);
-//        std::vector<std::string> lines = System::File::read_lines("orders.log");
-//        if (target_line<1 or target_line> static_cast<int>(lines.size())) {
-//            std::cerr << "ERROR : line number out of range" << std::endl;
-//            return;
-//        }
-//        std::string line = lines[target_line - 1];
-//        size_t last_pipe = line.rfind('|');
-//        if (last_pipe == std::string::npos) {
-//            std::cerr << "ERROR : malformed line" << std::endl;
-//            return;
-//        }
-//        size_t second_last_pipe = line.rfind('|', last_pipe - 1);
-//        if (second_last_pipe == std::string::npos) {
-//            std::cerr << "ERROR : malformed line" << std::endl;
-//            return;
-//        }
-//        std::string updated_line = line.substr(0, second_last_pipe + 1) + "delivered    " + line.substr(last_pipe);
-//        System::File::modify_line("orders.log", target_line, updated_line);
-//    }
-//    else {
-//        std::cerr<<"ERROR : invalid command";
-//    }
-//}
 
 void Restaurant::Order::review_order(const System::Command& cmd) {
     if (not System::File::exists("orders.log")) {
