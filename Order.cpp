@@ -45,7 +45,7 @@ void Restaurant::Order::_save(Order& order) {
 Restaurant::Order::Order(const System::Command& command) :
    _status(Status::in_progress) {
     if (command.end() < 3) {
-        std::cerr << "ERROR : too few arguments";
+        std::cerr << "ERROR : too few arguments" << std::endl;
         return;
     }
     _customer = (Customer(
@@ -135,7 +135,7 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
 
 void Restaurant::Order::review_order(const System::Command& cmd) {
     if (not System::File::exists("orders.log")) {
-        std::cerr << "ERROR : orders.log not found";
+        std::cerr << "ERROR : orders.log not found" << std::endl;
         return;
     }
     std::vector<std::string> lines = System::File::read_lines("orders.log");
@@ -196,7 +196,7 @@ void Restaurant::Order::update_status(const short int stat) {
         _status = Status::changed;
         break;
     default:
-        std::cerr << "Invalid order status.";
+        std::cerr << "Invalid order status." << std::endl;
         break;
     }
 }
@@ -216,7 +216,7 @@ std::string Restaurant::Order::status() const {
         return "changed";
         break;
     default:
-        std::cerr << "Error : invalid order status";
+        std::cerr << "Error : invalid order status" << std::endl;
         break;
     }
 }

@@ -42,7 +42,7 @@ bool System::File::exists(
 unsigned int System::File::count_lines
 (const std::string& name) {
 	if (!exists(name)) {
-		std::cerr << "Error : " << name << " nod found";
+		std::cerr << "Error : " << name << " nod found" << std::endl;
 		return 0;
 	}
 	std::ifstream in(name);

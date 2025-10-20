@@ -1,3 +1,6 @@
-﻿  Costumer.cpp
-D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Costumer.cpp(43,22): warning C4018: '<=': signed/unsigned mismatch
+﻿  App.cpp
+  Command.cpp
+D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Command.cpp(53,28): warning C4267: 'return': conversion from 'size_t' to 'unsigned int', possible loss of data
+D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Command.cpp(59,23): warning C4018: '<=': signed/unsigned mismatch
+  Generating Code...
   budget_restaurant.vcxproj -> D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\x64\Debug\budget_restaurant.exe

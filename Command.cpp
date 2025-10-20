@@ -8,9 +8,15 @@ System::Command::Command(std::string input) {
 	_split(input);
 }
 
-System::Command::Command() = default; // Java programmers be like
+System::Command::Command() = default;
 
 void System::Command::_split(std::string _user_input) {
+	for (const auto& x : _user_input) {
+		if (x == '|') {
+			std::cerr << "ERROR : forbidden character : | (pipe)" << std::endl;
+			return;
+		}
+	}
 	for (auto& x : _user_input)
 		x = std::tolower(static_cast<unsigned char>(x));
 	std::stringstream ss(_user_input);

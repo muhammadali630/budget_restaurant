@@ -36,6 +36,7 @@ namespace Restaurant {
 	};
 
 	class Menu {
+		static System::Registry _reg;
 		std::vector<Product> _menu;
 	public:
 		Menu();
@@ -44,6 +45,7 @@ namespace Restaurant {
 		std::vector<Product>::const_iterator end() const;
 		friend std::ostream& operator<<(std::ostream& os, Menu& menu);
 		static void handle(const System::Command& cmd);
+		static void display_menu();
 	};
 
 	enum Status {

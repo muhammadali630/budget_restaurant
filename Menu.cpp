@@ -1,27 +1,24 @@
 #include "Restaurant.h"
 
-//Restaurant::Menu::Menu(std::vector<Restaurant::Product> pdts) : _menu(pdts) {
-//
-//}
+System::Registry Restaurant::Menu::_reg = System::Map_S2F(
+	{
+	{"-display", [](const System::Command& cmd) {
+		display_menu();
+	}}
+	}
+);
 
 Restaurant::Menu::Menu() {
 	if (!System::File::exists("menu.log")) {
-		std::cerr << "ERROR : menu.log not found";
+		std::cerr << "ERROR : menu.log not found" << std::endl;
 		System::App::quit(1);
 		return;
 	}
 	std::vector<std::string> lines = System::File::read_lines("menu.log");
 	for (const std::string& line : lines) {
-		/*std::istringstream iss(line);
-		std::string name;
-		double price;*/
 		std::stringstream ss(line);
 		std::string name, price;
 		ss >> name >> price;
-
-		/*if (iss >> name >> price) {
-			_menu.emplace_back(Restaurant::Product(name,price));
-		}*/
 		if (System::u_is_number(price)) {
 			_menu.push_back(Restaurant::Product(name, std::stod(price)));
 		}
@@ -45,11 +42,16 @@ std::vector<Restaurant::Product>::const_iterator Restaurant::Menu::end() const {
 }
 
 void Restaurant::Menu::handle(const System::Command& cmd) {
-	return;
+	_reg.initiate_sub_command(cmd);
 }
 
 std::ostream& Restaurant::operator<<(std::ostream& os, Restaurant::Menu& menu) {
 	for (const auto& x : menu._menu)
 		os << x << std::endl;
 	return os;
+}
+
+void Restaurant::Menu::display_menu() {
+	Menu menu;
+	std::cout << menu;
 }

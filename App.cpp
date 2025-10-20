@@ -27,13 +27,11 @@ System::Registry System::App::_reg = System::Map_S2F({
 int System::App::run() {
 	_is_running = true;
 	while (_is_running) {
-		// ask for a command
+		std::cout << ">";
 		System::Command command;
-		std::cin >> command;
-		// run the command
-		main_loop(command);
-		//test_loop();
-		// if exit conditions are met, quit
+		std::cin >> command; // ask for a command
+		main_loop(command); // run the command
+		//test_loop(); // test your app via test loop
 	}
 	return _return_value;
 }
@@ -44,16 +42,8 @@ void System::App::main_loop(Command command){
 } 
 
 void System::App::test_loop(){
-	// std::vector<Restaurant::Product> products = {
-    // 	Restaurant::Product("Pizza", 12.99),
-    // 	Restaurant::Product("Burger", 8.49),
-    // 	Restaurant::Product("Salad", 6.75)
-	// };
-	// Restaurant::Menu menu(products);
-	// std::cout<<menu;
-	//quit(0);
-	Restaurant::Menu menu;
-	std::cout << menu;
+	//test your app here
+	return;
 }
 
 void System::App::quit(int result) { 
