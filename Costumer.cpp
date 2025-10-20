@@ -15,8 +15,8 @@ Restaurant::Customer::Customer() {
 }
 
 std::ostream& Restaurant::operator<<(std::ostream& os, const Customer& ctm) {
-    os << ctm._first_name << " "
-        << ctm._last_name << " "
-        << ctm._student_num << " ";
+    os << std::setw(10) << std::left << ctm._first_name << " |"
+        << std::setw(10) << std::left << ctm._last_name << " |"
+        << std::setw(10) << std::left << ctm._student_num << " |";
     return os;
 }

@@ -6,6 +6,8 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
+#include <utility>
+#include <iomanip>
 
 namespace System {
 
@@ -18,9 +20,14 @@ namespace System {
 		Command();
 		friend std::ostream& operator<<(std::ostream& os, const Command& command);
 		friend std::istream& operator>>(std::istream& is, Command& command);
-		std::string operator[](int index);
+		std::string operator[](int index) const;
 		std::vector<std::string> get_args() const;
 		bool is_empty() const;
+		unsigned int end() const;
+		static Command reduce(
+			const Command& cmd, 
+			const unsigned int index
+		);
 	};
 
 	using Map_S2F = std::unordered_map <
@@ -28,7 +35,6 @@ namespace System {
 			std::function<void(const Command& cmd)>>;
 
 	class Registry {
-		static Map_S2F _registry;
 		Map_S2F _sub_registry;
 	public:
 		Registry(Map_S2F cmd);
@@ -38,14 +44,15 @@ namespace System {
 	};
 
 	class App {
-		bool _is_running;
-		int _return_value;
+		static Registry _reg;
+		static bool _is_running;
+		static int _return_value;
 	public:
 		App();
 		int run();
 		void main_loop(Command command);
 		void test_loop();
-		void quit(int result);
+		static void quit(int result);
 	};
 
 	class File {
@@ -56,7 +63,26 @@ namespace System {
 		static std::vector<std::string> read_lines(
 			const std::string& name
 		);
-		bool exists(const std::string& name) const;
+		static std::string read_line(
+			const std::string& name,
+			const unsigned int index
+		);
+		static bool exists(const std::string& name);
+		static unsigned int count_lines
+		(const std::string& name);
+		static void modify_line(
+			const std::string& name,
+			const unsigned int line_number,
+			const std::string& new_line
+		);
+		static void modify_section(
+			const std::string& name,
+			const unsigned int line_number,
+			const unsigned int section_index,
+			const std::string& new_value
+		);
 	};
+
+	bool u_is_number(std::string str);
 
 }
