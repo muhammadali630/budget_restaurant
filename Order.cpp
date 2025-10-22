@@ -85,6 +85,7 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
         if (not(get_current_status(target_line) == Status::in_progress
             or get_current_status(target_line) == Status::changed)) {
             std::cerr << "ERROR : cancelled or already delivered" << std::endl;
+            std::cout << get_current_status(target_line) << std::endl;
             return;
         }
         System::File::modify_section(
@@ -112,7 +113,6 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
             Product::fill_product_list(
                 System::Command::reduce(cmd, 1)
             );
-        std::cout << System::Command::reduce(cmd, 1) << std::endl;
         if (items.empty()) {
             std::cerr << "ERROR : cannot put empty order" << std::endl;
             return;
@@ -158,19 +158,11 @@ Restaurant::Status Restaurant::Order::get_current_status(const unsigned int targ
         std::cerr << "ERROR : orders.log not found" << std::endl;
         return Status::invalid;
     }
-    std::string line = System::File::read_line("orders.log", target_line);
-    if (line.empty()) {
-        std::cerr << "ERROR : invalid line" << std::endl;
-        return Status::invalid;
-    }
-    size_t last_pipe = line.rfind('|');
-    if (last_pipe == std::string::npos) return Status::invalid;
-    size_t second_last_pipe = line.rfind('|', last_pipe - 1);
-    if (second_last_pipe == std::string::npos) return Status::invalid;
-    std::string status_str = line.substr(second_last_pipe + 1, last_pipe - second_last_pipe - 1);
-    if (status_str == "in progress  ") return Status::in_progress;
-    else if (status_str == "delivered    ") return Status::delivered;
-    else if (status_str == "cancelled    ") return Status::cancelled;
+    std::string status_str = System::File::get_section("orders.log", target_line, 5);
+    if (System::u_remove_spaces(status_str) == "inprogress") return Status::in_progress;
+    else if (System::u_remove_spaces(status_str) == "delivered") return Status::delivered;
+    else if (System::u_remove_spaces(status_str) == "cancelled") return Status::cancelled;
+    else if (System::u_remove_spaces(status_str) == "changed") return Status::changed;
     else return Status::invalid;
 }
 
@@ -203,20 +195,20 @@ void Restaurant::Order::update_status(const short int stat) {
 
 std::string Restaurant::Order::status() const {
     switch (_status) {
-    case 1:
+    case Status::in_progress:
         return "in progress";
         break;
-    case 2:
+    case Status::delivered:
         return "delivered";
         break;
-    case 3:
+    case Status::cancelled:
         return "cancelled";
         break;
-    case 4:
+    case Status::changed:
         return "changed";
         break;
     default:
-        std::cerr << "Error : invalid order status" << std::endl;
+        return "invalid";
         break;
     }
 }

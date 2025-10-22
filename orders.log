@@ -1,2 +1,4 @@
 1.      |donald     |trump      |123-444    |$36.00    |cancelled    |burger : 9.00 $ (x4), 
-2.      |james      |may        |94-334-91  |$44.25    |changed      |pizza : 12.50 $ (x3), salad : 6.75 $ (x3), 
+2.      |james      |may        |94-334-91  |$44.25    |delivered    |pizza : 12.50 $ (x3), salad : 6.75 $ (x3), 
+3.      |james      |clear      |93-123-44  |$38.25    |delivered    |burger : 9.00 $ (x1), salad : 6.75 $ (x2), 
+4.      |mamad      |haghighi   |403333     |$40.75    |in progress  |pizza : 12.50 $ (x2), salad : 6.75 $ (x1), burger : 9.00 $ (x1), 

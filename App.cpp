@@ -19,8 +19,9 @@ System::Registry System::App::_reg = System::Map_S2F({
 	{"customer", [](const System::Command& cmd) {
 		Restaurant::Customer::handle(cmd);
 	}},
-	{"quit", [](const System::Command&) {
-		quit(0);
+	{"quit", [](const System::Command& cmd) {
+		if (cmd.is_empty()) quit(0);
+		else std::cerr << "ERROR : invalid command" << std::endl;
 	}}
 	});
 
