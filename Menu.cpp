@@ -30,7 +30,7 @@ Restaurant::Menu::Menu() {
 	}
 }
 
-std::vector<Restaurant::Product> Restaurant::Menu::get_menu() {
+const std::vector<Restaurant::Product>& Restaurant::Menu::get_menu() const{
 	return _menu;
 }
 
@@ -54,4 +54,12 @@ std::ostream& Restaurant::operator<<(std::ostream& os, Restaurant::Menu& menu) {
 void Restaurant::Menu::display_menu() {
 	Menu menu;
 	std::cout << menu;
+}
+
+std::pair<bool, int> Restaurant::Menu::find_in_menu(
+	std::string str) {
+	for (int i = 0;i < this->get_menu().size();i++) {
+		if (str == this->get_menu()[i].get_name()) return { true ,i };
+	}
+	return { false , -1 };
 }

@@ -1,5 +1,7 @@
 #include "Restaurant.h"
 
+std::string Restaurant::Order::ORDER_LOG_FILE = "orders.log";
+
 System::Registry Restaurant::Order::_reg = System::Map_S2F(
     {
     {"-new", [](const System::Command& cmd) {
@@ -20,26 +22,26 @@ System::Registry Restaurant::Order::_reg = System::Map_S2F(
     }
 );
 
-void Restaurant::Order::_normalize(Order& order) {
+void Restaurant::Order::_normalize() {
     std::vector<std::pair<Product, unsigned int>> items;
-    items.push_back(order._items[0]);
-    for (int i = 1;i < order._items.size();i++) {
+    items.push_back(this->_items[0]);
+    for (int i = 1;i < this->_items.size();i++) {
         bool found = false;
         for (int j = 0;j < items.size();j++) {
-            if (items[j].first == order._items[i].first) { //repeated product
+            if (items[j].first == this->_items[i].first) { //repeated product
                 items[j].second++;
                 found = true;
                 break;
             }
         }
-        if (!found) items.push_back(order._items[i]); //is new!
+        if (!found) items.push_back(this->_items[i]); //is new!
     }
-    order._items = items;
+    this->_items = items;
 }
 
-void Restaurant::Order::_save(Order& order) {
-    std::string str = format_order(order);
-    System::File::write("orders.log", str);
+void Restaurant::Order::_save() {
+    std::string str = this->format_order();
+    System::File::write(ORDER_LOG_FILE, str);
 }
 
 Restaurant::Order::Order(const System::Command& command) :
@@ -58,7 +60,7 @@ Restaurant::Order::Order(const System::Command& command) :
         std::cerr << "ERROR : order is empty" << std::endl;
         return;
     }
-    _normalize(*this);
+    _normalize();
 }
 
 void Restaurant::Order::handle(const System::Command& cmd) {
@@ -67,7 +69,7 @@ void Restaurant::Order::handle(const System::Command& cmd) {
 
 void Restaurant::Order::new_order(const System::Command& cmd) {
     Order order(cmd);
-    _save(order);
+    order._save();
 }
 
 void Restaurant::Order::change_order(Status new_status, const System::Command& cmd) {
@@ -89,7 +91,7 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
             return;
         }
         System::File::modify_section(
-            "orders.log",
+            ORDER_LOG_FILE,
             target_line,
             5,
             "delivered    "
@@ -102,7 +104,7 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
             return;
         }
         System::File::modify_section(
-            "orders.log",
+            ORDER_LOG_FILE,
             target_line,
             5,
             "cancelled    "
@@ -118,27 +120,27 @@ void Restaurant::Order::change_order(Status new_status, const System::Command& c
             return;
         }
         System::File::modify_section(
-            "orders.log",
+            ORDER_LOG_FILE,
             target_line,
             5,
             "changed      "
         );
         System::File::modify_section(
-            "orders.log",
+            ORDER_LOG_FILE,
             target_line,
             6,
-            Product::format_products(items).str()
+            Product::format_products(items)
         );
         break;
     }
 }
 
 void Restaurant::Order::review_order(const System::Command& cmd) {
-    if (not System::File::exists("orders.log")) {
+    if (not System::File::exists(ORDER_LOG_FILE)) {
         std::cerr << "ERROR : orders.log not found" << std::endl;
         return;
     }
-    std::vector<std::string> lines = System::File::read_lines("orders.log");
+    std::vector<std::string> lines = System::File::read_lines(ORDER_LOG_FILE);
     if (cmd.is_empty()) {
         int start = std::max(0, static_cast<int>(lines.size() - 10));
         for (int i = start; i < lines.size();i++)
@@ -154,11 +156,11 @@ void Restaurant::Order::review_order(const System::Command& cmd) {
 }
 
 Restaurant::Status Restaurant::Order::get_current_status(const unsigned int target_line) {
-    if (not System::File::exists("orders.log")) {
+    if (not System::File::exists(ORDER_LOG_FILE)) {
         std::cerr << "ERROR : orders.log not found" << std::endl;
         return Status::invalid;
     }
-    std::string status_str = System::File::get_section("orders.log", target_line, 5);
+    std::string status_str = System::File::get_section(ORDER_LOG_FILE, target_line, 5);
     if (System::u_remove_spaces(status_str) == "inprogress") return Status::in_progress;
     else if (System::u_remove_spaces(status_str) == "delivered") return Status::delivered;
     else if (System::u_remove_spaces(status_str) == "cancelled") return Status::cancelled;
@@ -166,31 +168,15 @@ Restaurant::Status Restaurant::Order::get_current_status(const unsigned int targ
     else return Status::invalid;
 }
 
-double Restaurant::Order::cost(Order& order) {
+double Restaurant::Order::cost() {
     double result = 0;
-    for (const auto& x : order._items)
+    for (const auto& x : this->_items)
         result += x.first.get_price() * x.second;
     return result;
 }
 
-void Restaurant::Order::update_status(const short int stat) {
-    switch (stat) {
-    case 1:
-        _status = Status::in_progress;
-        break;
-    case 2:
-        _status = Status::delivered;
-        break;
-    case 3:
-        _status = Status::cancelled;
-        break;
-    case 4:
-        _status = Status::changed;
-        break;
-    default:
-        std::cerr << "Invalid order status." << std::endl;
-        break;
-    }
+void Restaurant::Order::update_status(const Status s) {
+    _status = s;
 }
 
 std::string Restaurant::Order::status() const {
@@ -213,17 +199,17 @@ std::string Restaurant::Order::status() const {
     }
 }
 
-std::string Restaurant::Order::format_order(Order& order) {
+std::string Restaurant::Order::format_order() {
     unsigned int line_number =
-        (!System::File::exists("orders.log") ?
-            1 : System::File::count_lines("orders.log") + 1);
+        (!System::File::exists(ORDER_LOG_FILE) ?
+            1 : System::File::count_lines(ORDER_LOG_FILE) + 1);
     std::ostringstream oss;
     oss << std::setw(8) << std::left << (std::to_string(line_number) + ".") << "|"
-        << order._customer
+        << this->_customer
         << std::setw(10) << std::left << ("$" + (static_cast<std::ostringstream&&>(
-            std::ostringstream{} << std::fixed << std::setprecision(2) << cost(order)
+            std::ostringstream{} << std::fixed << std::setprecision(2) << this->cost()
             ).str())) << "|"
-        << std::setw(12) << std::left << order.status() << " |"
-        << std::left << Product::format_products(order._items).str();
+        << std::setw(12) << std::left << this->status() << " |"
+        << std::left << Product::format_products(this->_items);
     return oss.str();
 }

@@ -88,6 +88,10 @@ void System::File::modify_section(
 		return;
 	}
 	std::string line = System::File::read_line(name, line_number - 1);
+	if (line.find('|') == std::string::npos) {
+		std::cerr << "error : line is not pipe-delimited" << std::endl;
+		return;
+	}
 	if (line.empty()) {
 		std::cerr << "ERROR : line invalid" << std::endl;
 		return;
@@ -121,6 +125,10 @@ std::string System::File::get_section(
 		return "";
 	}
 	std::string line = System::File::read_line(name, line_number - 1);
+	if (line.find('|') == std::string::npos) {
+		std::cerr << "error : line is not pipe-delimited" << std::endl;
+		return "";
+	}
 	if (line.empty()) {
 		std::cerr << "ERROR : line invalid" << std::endl;
 		return "";

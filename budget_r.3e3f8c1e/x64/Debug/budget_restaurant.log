@@ -1,2 +1,13 @@
-﻿  Order.cpp
+﻿  App.cpp
+  Costumer.cpp
+D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Costumer.cpp(43,22): warning C4018: '<=': signed/unsigned mismatch
+  main.cpp
+  Menu.cpp
+  Order.cpp
+  Product.cpp
+D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Product.cpp(29,22): warning C4018: '<=': signed/unsigned mismatch
+D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\Product.cpp(33,19): warning C4018: '>': signed/unsigned mismatch
+  Registry.cpp
+  Utilities.cpp
+  Generating Code...
   budget_restaurant.vcxproj -> D:\farqa\Documents\IUT\t3\AP\Projects\budget_restaurant\x64\Debug\budget_restaurant.exe

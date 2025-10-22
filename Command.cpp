@@ -40,7 +40,11 @@ std::istream& System::operator>>(std::istream& is, System::Command& command) {
 }
 
 std::string System::Command::operator[](int index) const {
-	return this->_arg_vector[index];
+	if (index < 0 or index >= static_cast<int>(_arg_vector.size())) {
+		std::cerr << "error : command index out of bounds" << std::endl;
+		return "";
+	}
+	return _arg_vector.at(index);
 }
 
 std::vector<std::string> System::Command::get_args() const {

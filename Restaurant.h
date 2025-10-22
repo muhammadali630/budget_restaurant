@@ -30,7 +30,7 @@ namespace Restaurant {
 		friend std::ostream& operator<<(std::ostream& os , const Product& pdt);
 		bool operator==(const Product&pdt);
 		static std::vector<std::pair<Product, unsigned int>> fill_product_list(const System::Command& cmd);
-		static std::ostringstream format_products(
+		static std::string format_products(
 			std::vector<std::pair<Product, unsigned int>> items
 		);
 	};
@@ -40,12 +40,13 @@ namespace Restaurant {
 		std::vector<Product> _menu;
 	public:
 		Menu();
-		std::vector<Product> get_menu();
+		const std::vector<Product>& get_menu() const;
 		std::vector<Product>::const_iterator begin() const;
 		std::vector<Product>::const_iterator end() const;
 		friend std::ostream& operator<<(std::ostream& os, Menu& menu);
 		static void handle(const System::Command& cmd);
 		static void display_menu();
+		std::pair<bool, int> find_in_menu(std::string str);
 	};
 
 	enum Status {
@@ -56,27 +57,27 @@ namespace Restaurant {
 		changed = 4,
 	};
 
+	inline std::string status_to_string(Status s);
+
 	class Order {
+		static std::string ORDER_LOG_FILE;
 		static System::Registry _reg;
 		Restaurant::Customer _customer;
 		std::vector<std::pair<Product, unsigned int>> _items;
 		Status _status;
-		static void _normalize(Order& order);
-		static void _save(Order& order);
+		void _normalize();
+		void _save();
 	public:
 		Order(const System::Command& cmd);
 		static void handle(const System::Command& cmd);
 		static void new_order(const System::Command& cmd);
 		static void change_order(Status new_status, const System::Command& cmd);
 		static Status get_current_status(const unsigned int target_line);
-		void update_status(const short int stat);
+		void update_status(Status);
 		static void review_order(const System::Command& cmd);
-		static double cost(Order& order);
+		double cost();
 		std::string status() const;
-		static std::string format_order(Order& order);
+		std::string format_order();
 	};
 
-	std::pair<bool, int> u_find_in_menu(
-		std::string str, Menu& menu
-	);
 }

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Restaurant.h"
 #include "System.h"
 
